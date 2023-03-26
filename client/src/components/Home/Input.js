@@ -1,30 +1,45 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Image, Form, Button } from 'react-bootstrap';
+// import { useForm } from 'react-hook-form';
 
 function Input() {
-  const { register, handleSubmit } = useForm({ mode: "all" });
-  const onSubmit = (data) => console.log(JSON.stringify(data));
+  const [image, setImage] = useState();
+  const [predictImageURL, setPredictImageURL] = useState();
+
+  function handleImageChange(e) {
+    setImage(e.target.files[0]);
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    // console.log(image);
+    // console.log(URL.createObjectURL(image));
+
+    const formData = new FormData();
+    formData.append('image', image);
+
+    // for (const value of formData.values()) {
+    //   console.log(value);
+    // }
+
+    const response = await axios.post('/api/upload', formData);
+    // console.log(response.data.url);
+    setPredictImageURL(response.data.url);
+  }
 
   return (
-    <form>
-      <input
-        {...register("firstName", { required: true })}
-        placeholder="First name"
-      />
-      <br></br>
-      <input
-        {...register("lastName", { required: true })}
-        placeholder="Last name"
-      />
-      <br></br>
-      <input {...register("picture", { required: true })} type="file" />
-      <br></br>
-      <button type="button" onClick={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit} encType="multipart/form-data">
+      <h2>Add Image:</h2>
+      <Form.Control type="file" onChange={handleImageChange} />
+      <Button variant="primary" type="submit">
         Submit
-      </button>
-    </form>
+      </Button>
+      {image && <Image fluid src={URL.createObjectURL(image)} />}
+      {predictImageURL && <Image fluid src={predictImageURL} />}
+    </Form>
   );
 }
 
 export default Input;
-

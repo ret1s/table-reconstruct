@@ -6,10 +6,15 @@ function Home() {
   return (
     <section>
       <Container fluid className="home-section" id="home">
-        <Container fluid className="home-about-section" id="home">
-          <Container fluid className="home-about-body" id="home">
-            <Input />
-          </Container>
+        <Container fluid className="home-content">
+          <Row>
+            <Col md={6}>
+              <div>
+                <Input />
+              </div>
+            </Col>
+            <Col md={6}></Col>
+          </Row>
         </Container>
       </Container>
     </section>
