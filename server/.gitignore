@@ -1,5 +1,5 @@
 .DS_Store
-/static
-/__pycache__
-/venv
-/scr
+static/
+__pycache__/
+venv/
+scr/
