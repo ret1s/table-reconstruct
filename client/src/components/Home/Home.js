@@ -7,14 +7,7 @@ function Home() {
     <section>
       <Container fluid className="home-section" id="home">
         <Container fluid className="home-content">
-          <Row>
-            <Col md={6}>
-              <div>
-                <Input />
-              </div>
-            </Col>
-            <Col md={6}></Col>
-          </Row>
+          <Input />
         </Container>
       </Container>
     </section>

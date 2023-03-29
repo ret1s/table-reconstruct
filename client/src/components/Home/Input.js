@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Image, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
 // import { useForm } from 'react-hook-form';
 
 function Input() {
@@ -30,15 +30,32 @@ function Input() {
   }
 
   return (
-    <Form onSubmit={handleSubmit} encType="multipart/form-data">
-      <h2>Add Image:</h2>
-      <Form.Control type="file" onChange={handleImageChange} />
-      <Button variant="primary" type="submit">
-        Submit
-      </Button>
-      {image && <Image fluid src={URL.createObjectURL(image)} />}
-      {predictImageURL && <Image fluid src={predictImageURL} />}
-    </Form>
+    <section>
+      <Row>
+        <Col md={6}>
+          <div>
+            <Form onSubmit={handleSubmit} encType="multipart/form-data">
+              <h2>Add Image:</h2>
+              <Form.Control type="file" onChange={handleImageChange} />
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+              
+            </Form>
+          </div>
+        </Col>
+        <Col md={6}></Col>
+      </Row>
+      <Row>
+        <Col md={6}>
+          {image && <Image fluid src={URL.createObjectURL(image)} />}
+        </Col>
+        <Col md={6}>
+          {predictImageURL && <Image fluid src={predictImageURL} />}
+        </Col>
+      </Row>
+    </section>
+    
   );
 }
 
