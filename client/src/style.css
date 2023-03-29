@@ -82,11 +82,17 @@ button:focus {
   backdrop-filter: blur(15px) !important;
 }
 
+.navbar-container {
+  max-width: 90%;
+  margin: auto;
+}
+
 .navbar {
+  background-color: #40a6ee;
   position: fixed !important;
   transition: all 0.3s ease-out 0s !important;
   padding: 0.3rem 2rem !important;
-  font-size: 1.2rem !important;
+  font-size: 1.1rem !important;
 }
 
 .navbar-toggler {
@@ -194,7 +200,7 @@ button:focus {
   height: 5px;
   width: 0;
   border-radius: 16px;
-  background: #c95bf5;
+  background: white;
   bottom: 1px;
   left: 0;
   z-index: -1;
@@ -257,17 +263,30 @@ button:focus {
 .home-section {
   position: relative;
   /* z-index: -1; */
-  background-image: url(./assets/home-bg.png);
+  background-color: whitesmoke;
+  /* background-image: url(./assets/home-bg.png); */
   background-position: top center;
-  background-repeat: repeat;
+  /* background-repeat: repeat; */
   padding-bottom: 30px !important;
   padding-top: 30px !important;
 }
 
 .home-content {
-  padding: 9rem 0 2rem !important;
-  color: whitesmoke;
-  text-align: center;
+  padding: 5rem 1rem 35rem 1rem !important;
+  color: black;
+  text-align: left;
+}
+
+.submit-form {
+  padding: 1rem 1rem 1rem 1rem !important;
+  box-shadow: 0 3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+}
+
+.result-box {
+  padding: 1rem 1rem 1rem 1rem !important;
+  box-shadow: 0 3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
 }
 
 .heading {
@@ -402,7 +421,7 @@ button:focus {
 /* Footer */
 /* --------- */
 .footer {
-  background-color: rgb(10, 4, 22);
+  background-color: #162850;
   bottom: 0 !important;
   padding-top: 10px !important;
   padding-bottom: 8px !important ;

@@ -32,26 +32,24 @@ function Input() {
   return (
     <section>
       <Row>
-        <Col md={6}>
+        <Col md={4}>
           <div>
-            <Form onSubmit={handleSubmit} encType="multipart/form-data">
+            <Form className='submit-form' onSubmit={handleSubmit} encType="multipart/form-data">
               <h2>Add Image:</h2>
               <Form.Control type="file" onChange={handleImageChange} />
-              <Button variant="primary" type="submit">
+              <Button variant="default" type="submit" style={{ color: "white", background: "silver" }}>
                 Submit
               </Button>
-              
             </Form>
           </div>
         </Col>
-        <Col md={6}></Col>
-      </Row>
-      <Row>
-        <Col md={6}>
-          {image && <Image fluid src={URL.createObjectURL(image)} />}
-        </Col>
-        <Col md={6}>
-          {predictImageURL && <Image fluid src={predictImageURL} />}
+        <Col md={8} className='result-box'>
+          <Col md={6}>
+            {image && <Image fluid src={URL.createObjectURL(image)} />}
+          </Col>
+          <Col md={6}>
+            {predictImageURL && <Image fluid src={predictImageURL} />}
+          </Col>  
         </Col>
       </Row>
     </section>
