@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Preloader from './components/Pre';
-import Navbar from './components/Navbar';
+import WithSubnavigation from './components/Navbar';
 import Home from './components/Home/Home';
 import About from './components/About/About';
 import Product from './components/Product/Product';
 import Footer from './components/Footer';
 import SignIn from './components/SignIn/SignIn';
+import { ChakraProvider } from '@chakra-ui/react';
 import {
   BrowserRouter as Router,
   Route,
@@ -30,21 +31,23 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Preloader load={load} />
-      <div className="App" id={load ? 'no-scroll' : 'scroll'}>
-        <Navbar />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <ChakraProvider>
+      <Router>
+        <Preloader load={load} />
+        <div className="App" id={load ? 'no-scroll' : 'scroll'}>
+          <WithSubnavigation />
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+          <Footer />
+        </div>
+      </Router>
+    </ChakraProvider>
   );
 }
 
