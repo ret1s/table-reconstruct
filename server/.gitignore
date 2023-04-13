@@ -1,5 +1,5 @@
 .DS_Store
-static/
 __pycache__/
-venv/
-src/
+
+static/input_pics/*
+static/result_pics/*
