@@ -582,6 +582,11 @@ def main(pil_img, filename):
     input_path = 'static/input_pics/'
     result_path = 'static/result_pics/'
 
+    if not os.path.exists(input_path):
+        os.makedirs(input_path)
+    if not os.path.exists(result_path):
+        os.makedirs(result_path)
+
     filename, ext = os.path.splitext(filename)
 
     pil_img.save(os.path.join(input_path, f'{filename}.png'))
