@@ -52,7 +52,7 @@ function InputSection() {
             Table {id + 1}
           </Heading>
           <Grid minH="100%" templateColumns="repeat(4, 1fr)" gap={4}>
-            <GridItem bg="white" orderRadius="lg" borderWidth="1px">
+            <GridItem bg="white" borderRadius="10px" borderWidth="1px">
               <Center fontSize="25" fontWeight={1000} mt="10px">
                 Table Image
               </Center>
@@ -64,7 +64,7 @@ function InputSection() {
                 )}
               </Center>
             </GridItem>
-            <GridItem bg="white" orderRadius="lg" borderWidth="1px">
+            <GridItem bg="white" borderRadius="10px" borderWidth="1px">
               <Center fontSize="25" fontWeight={1000} mt="10px">
                 OCR Result
               </Center>
@@ -76,7 +76,7 @@ function InputSection() {
                 )}
               </Center>
             </GridItem>
-            <GridItem bg="white" orderRadius="lg" borderWidth="1px">
+            <GridItem bg="white" borderRadius="10px" borderWidth="1px">
               <Center fontSize="25" fontWeight={1000} mt="10px">
                 Structure Result
               </Center>
@@ -88,7 +88,7 @@ function InputSection() {
                 )}
               </Center>
             </GridItem>
-            <GridItem bg="white" orderRadius="lg" borderWidth="1px">
+            <GridItem bg="white" borderRadius="10px" borderWidth="1px">
               <Center fontSize="25" fontWeight={1000} mt="10px">
                 Cells Result
               </Center>
@@ -110,7 +110,7 @@ function InputSection() {
       <Stack spacing={6}>
         <Grid minH="100%" templateColumns="repeat(9, 1fr)" gap={4}>
           <GridItem
-            borderRadius="lg"
+            borderRadius="10px"
             borderWidth="1px"
             h="145px"
             w="270px"
@@ -139,7 +139,7 @@ function InputSection() {
               </Center>
             </form>
           </GridItem>
-          <GridItem colSpan={4} bg="white" orderRadius="lg" borderWidth="1px">
+          <GridItem colSpan={4} bg="white" borderRadius="10px" borderWidth="1px">
             <Center fontSize="25" fontWeight={1000} mt="10px">
               Input Image
             </Center>
@@ -151,7 +151,7 @@ function InputSection() {
               )}
             </Center>
           </GridItem>
-          <GridItem colSpan={4} bg="white" orderRadius="lg" borderWidth="1px">
+          <GridItem colSpan={4} bg="white" borderRadius="10px" borderWidth="1px">
             <Center fontSize="25" fontWeight={1000} mt="10px">
               Detected Tables
             </Center>
