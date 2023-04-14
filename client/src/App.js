@@ -5,7 +5,6 @@ import Home from './components/Home/Home';
 import About from './components/About/About';
 import Product from './components/Product/Product';
 import Footer from './components/Footer';
-import SignIn from './components/SignIn/SignIn';
 import { ChakraProvider } from '@chakra-ui/react';
 import {
   BrowserRouter as Router,
@@ -41,10 +40,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/product" element={<Product />} />
             <Route path="/about" element={<About />} />
-            <Route path="/signin" element={<SignIn />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
-          <Footer />
+          <Footer className="footer"/>
         </div>
       </Router>
     </ChakraProvider>

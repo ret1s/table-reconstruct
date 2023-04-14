@@ -1,6 +1,6 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Container } from 'react-bootstrap';
+import { Button } from '@chakra-ui/react';
 
 function About() {
   return (

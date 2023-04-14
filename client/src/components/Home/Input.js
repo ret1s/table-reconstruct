@@ -41,8 +41,8 @@ function InputSection() {
   return (
     <section>
       <Grid
-        mt='-90px'
-        mb='-180px'
+        mt='-100px'
+        mb='-200px'
         h='500px'
         templateColumns='repeat(9, 1fr)'
         gap={4}
