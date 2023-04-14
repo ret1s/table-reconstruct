@@ -14,6 +14,15 @@ import {
 } from '@chakra-ui/react';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import {
+  SpreadsheetComponent,
+  SheetsDirective,
+  SheetDirective,
+  RowsDirective,
+  RowDirective,
+  CellsDirective,
+  CellDirective,
+} from '@syncfusion/ej2-react-spreadsheet';
 
 function InputSection() {
   const [inputImage, setInputImage] = useState();
@@ -48,59 +57,92 @@ function InputSection() {
     result.tables.map((data, id) => {
       return (
         <Stack spacing={6}>
-          <Heading fontFamily={'Roboto Condensed Bold'} as="h4" size="md" noOfLines={1}>
+          <Heading fontFamily={'Abel Pro'} as="h4" size="md" noOfLines={1}>
             Table {id + 1}
           </Heading>
           <Grid minH="100%" templateColumns="repeat(4, 1fr)" gap={4}>
             <GridItem bg="white" borderRadius="10px" borderWidth="1px">
-              <Center fontSize="25" fontWeight={1000} mt="10px">
+              <Center fontSize="20" fontWeight={1000} mt="10px">
                 Table Image
               </Center>
-              <Center>
-                {data && data.vis_img && (
-                  <Zoom>
+
+              {data && data.vis_img && (
+                <Zoom>
+                  <Center>
                     <Image boxSize="90%" src={data.vis_img} />
-                  </Zoom>
-                )}
-              </Center>
+                  </Center>
+                </Zoom>
+              )}
             </GridItem>
             <GridItem bg="white" borderRadius="10px" borderWidth="1px">
-              <Center fontSize="25" fontWeight={1000} mt="10px">
+              <Center fontSize="20" fontWeight={1000} mt="10px">
                 OCR Result
               </Center>
-              <Center>
-                {data && data.vis_ocr_img && (
-                  <Zoom>
+
+              {data && data.vis_ocr_img && (
+                <Zoom>
+                  <Center>
                     <Image boxSize="90%" src={data.vis_ocr_img} />
-                  </Zoom>
-                )}
-              </Center>
+                  </Center>
+                </Zoom>
+              )}
             </GridItem>
             <GridItem bg="white" borderRadius="10px" borderWidth="1px">
-              <Center fontSize="25" fontWeight={1000} mt="10px">
+              <Center fontSize="20" fontWeight={1000} mt="10px">
                 Structure Result
               </Center>
-              <Center>
-                {data && data.vis_str_img && (
-                  <Zoom>
+              {data && data.vis_str_img && (
+                <Zoom>
+                  <Center>
                     <Image boxSize="90%" src={data.vis_str_img} />
-                  </Zoom>
-                )}
-              </Center>
+                  </Center>
+                </Zoom>
+              )}
             </GridItem>
             <GridItem bg="white" borderRadius="10px" borderWidth="1px">
-              <Center fontSize="25" fontWeight={1000} mt="10px">
+              <Center fontSize="20" fontWeight={1000} mt="10px">
                 Cells Result
               </Center>
-              <Center>
-                {data && data.vis_cells_img && (
-                  <Zoom>
+
+              {data && data.vis_cells_img && (
+                <Zoom>
+                  <Center>
                     <Image boxSize="90%" src={data.vis_cells_img} />
-                  </Zoom>
-                )}
-              </Center>
+                  </Center>
+                </Zoom>
+              )}
             </GridItem>
           </Grid>
+
+          <SpreadsheetComponent
+            allowSave={true}
+            saveUrl="https://services.syncfusion.com/react/production/api/spreadsheet/save"
+          >
+            <SheetsDirective>
+              <SheetDirective name={'Table'}>
+                <RowsDirective>
+                  {data.cells_data &&
+                    data.cells_data.map((row, _) => {
+                      return (
+                        <RowDirective>
+                          <CellsDirective>
+                            {row.map((cell, _) => {
+                              return (
+                                <CellDirective
+                                  value={cell.value}
+                                  rowSpan={cell.rowSpan}
+                                  colSpan={cell.colSpan}
+                                ></CellDirective>
+                              );
+                            })}
+                          </CellsDirective>
+                        </RowDirective>
+                      );
+                    })}
+                </RowsDirective>
+              </SheetDirective>
+            </SheetsDirective>
+          </SpreadsheetComponent>
         </Stack>
       );
     });
@@ -139,34 +181,46 @@ function InputSection() {
               </Center>
             </form>
           </GridItem>
-          <GridItem colSpan={4} bg="white" borderRadius="10px" borderWidth="1px">
+          <GridItem
+            colSpan={4}
+            bg="white"
+            borderRadius="10px"
+            borderWidth="1px"
+          >
             <Center fontSize="25" fontWeight={1000} mt="10px">
               Input Image
             </Center>
-            <Center>
-              {inputImage && (
-                <Zoom>
+
+            {inputImage && (
+              <Zoom>
+                <Center>
                   <Image boxSize="90%" src={URL.createObjectURL(inputImage)} />
-                </Zoom>
-              )}
-            </Center>
+                </Center>
+              </Zoom>
+            )}
           </GridItem>
-          <GridItem colSpan={4} bg="white" borderRadius="10px" borderWidth="1px">
+          <GridItem
+            colSpan={4}
+            bg="white"
+            borderRadius="10px"
+            borderWidth="1px"
+          >
             <Center fontSize="25" fontWeight={1000} mt="10px">
               Detected Tables
             </Center>
-            <Center>
-              {result && result.vis_det && (
-                <Zoom>
+
+            {result && result.vis_det && (
+              <Zoom>
+                <Center>
                   <Image boxSize="90%" src={result.vis_det} />
-                </Zoom>
-              )}
-            </Center>
+                </Center>
+              </Zoom>
+            )}
           </GridItem>
         </Grid>
 
         {result && (
-          <Heading fontFamily={'Roboto Condensed Bold'} as="h1" size="xl" noOfLines={1}>
+          <Heading fontFamily={'Abel Pro'} as="h1" size="xl" noOfLines={1}>
             Found {result.num_tables} tables
           </Heading>
         )}

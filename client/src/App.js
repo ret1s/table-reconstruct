@@ -15,8 +15,13 @@ import {
 import ScrollToTop from './components/ScrollToTop';
 import './style.css';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import { registerLicense } from '@syncfusion/ej2-base';
+
+registerLicense(
+  'ORg4AjUWIQA/Gnt2VFhhQlJBfVpdXGdWfFN0RnNadV90flRCcC0sT3RfQF5jTX9XdkZiUH1dcndQQw=='
+);
 
 function App() {
   const [load, upadateLoad] = useState(true);
@@ -42,7 +47,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
-          <Footer className="footer"/>
+          <Footer className="footer" />
         </div>
       </Router>
     </ChakraProvider>

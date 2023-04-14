@@ -9,6 +9,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^5.11.14",
     "@react-pdf/renderer": "^2.2.0",
+    "@syncfusion/ej2-react-spreadsheet": "^21.1.39",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",

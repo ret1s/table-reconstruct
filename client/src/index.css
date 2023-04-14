@@ -1,14 +1,14 @@
 @font-face {
-  font-family: 'Abel Regular';
-  src: url(./font/Abel-Regular.ttf);
+  font-family: 'Abel Pro';
+  src: url(./font/AbelPro.ttf);
 }
 
 @font-face {
-  font-family: 'Roboto Condensed Bold';
-  src: url(./font/RobotoCondensed-Bold.ttf);
+  font-family: 'Abel Pro';
+  src: url(./font/AbelPro-Bold.ttf);
   font-weight: bold;
 }
 
 * {
-  font-family: 'Abel Regular';
+  font-family: 'Abel Pro';
 }

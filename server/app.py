@@ -578,6 +578,28 @@ def cells_to_excel(cells, file_path):
     workbook.close()
 
 
+def cells_to_data(cells):
+    cells = sorted(cells, key=lambda k: min(k['column_nums']))
+    cells = sorted(cells, key=lambda k: min(k['row_nums']))
+
+    num_columns = max([max(cell['column_nums']) for cell in cells]) + 1
+    num_rows = max([max(cell['row_nums']) for cell in cells]) + 1
+
+    res = [[{'value': '', 'rowSpan': 1, 'colSpan': 1} for i in range(num_columns)] for j in range(num_rows)]
+
+    for cell in cells:
+        start_row = min(cell['row_nums'])
+        end_row = max(cell['row_nums'])
+        start_col = min(cell['column_nums'])
+        end_col = max(cell['column_nums'])
+
+        res[start_row][start_col]['value'] = cell['cell_text']
+        res[start_row][start_col]['rowSpan'] = end_row - start_row + 1
+        res[start_row][start_col]['colSpan'] = end_col - start_col + 1
+
+    return res
+
+
 def main(pil_img, filename):
     input_path = 'static/input_pics/'
     result_path = 'static/result_pics/'
@@ -634,6 +656,10 @@ def main(pil_img, filename):
         cells_to_excel(cells, xlsx_path)
         table_dict['xlsx_url'] = urllib.parse.quote_plus(os.path.join('/static/result_pics/', f'{filename}_table{idx}.xlsx'))
         print(f"table_dict['xlsx_url'] = {table_dict['xlsx_url']}")
+
+        cells_data = cells_to_data(cells)
+        table_dict['cells_data'] = cells_data
+        print(f"table_dict['cells_data'] = {table_dict['cells_data']}")
 
         res['tables'].append(table_dict)
 
