@@ -48,10 +48,10 @@ function InputSection() {
     result.tables.map((data, id) => {
       return (
         <Stack spacing={6}>
-          <Heading as="h2" noOfLines={1}>
+          <Heading fontFamily={'Roboto Condensed Bold'} as="h4" size="md" noOfLines={1}>
             Table {id + 1}
           </Heading>
-          <Grid minH="500px" templateColumns="repeat(4, 1fr)" gap={4}>
+          <Grid minH="100%" templateColumns="repeat(4, 1fr)" gap={4}>
             <GridItem bg="white" orderRadius="lg" borderWidth="1px">
               <Center fontSize="25" fontWeight={1000} mt="10px">
                 Table Image
@@ -108,7 +108,7 @@ function InputSection() {
   return (
     <section>
       <Stack spacing={6}>
-        <Grid minH="500px" templateColumns="repeat(9, 1fr)" gap={4}>
+        <Grid minH="100%" templateColumns="repeat(9, 1fr)" gap={4}>
           <GridItem
             borderRadius="lg"
             borderWidth="1px"
@@ -166,7 +166,7 @@ function InputSection() {
         </Grid>
 
         {result && (
-          <Heading as="h1" noOfLines={1}>
+          <Heading fontFamily={'Roboto Condensed Bold'} as="h1" size="xl" noOfLines={1}>
             Found {result.num_tables} tables
           </Heading>
         )}
