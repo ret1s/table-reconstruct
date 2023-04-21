@@ -21,6 +21,8 @@ from paddleocr import PaddleOCR
 
 import postprocess
 
+cv2.setNumThreads(1)
+
 
 def load_ocr_instance():
     ocr_instance = PaddleOCR(use_angle_cls=False, lang='en', use_gpu=True)
@@ -54,13 +56,13 @@ detection_class_thresholds = {
     'no object': 10
 }
 structure_class_thresholds = {
-    'table': 0.42,
-    'table column': 0.56,
-    'table row': 0.5,
-    'table column header': 0.38,
-    'table projected row header': 0.27,
-    'table spanning cell': 0.4,
-    'no object': 10
+    "table": 0.45,
+    "table column": 0.6,
+    "table row": 0.5,
+    "table column header": 0.4,
+    "table projected row header": 0.3,
+    "table spanning cell": 0.5,
+    "no object": 10
 }
 
 
@@ -76,7 +78,7 @@ def table_detection(pil_img, imgsz=640):
     image = PIL_to_cv(pil_img)
     pred = detection_model(image, size=imgsz)
     pred = pred.xywhn[0]
-    result = pred.cpu().numpy()
+    result = pred.detach().numpy()
     return result
 
 
@@ -84,11 +86,11 @@ def table_structure(pil_img, imgsz=640):
     image = PIL_to_cv(pil_img)
     pred = structure_model(image, size=imgsz)
     pred = pred.xywhn[0]
-    result = pred.cpu().numpy()
+    result = pred.detach().numpy()
     return result
 
 
-def crop_image(pil_img, detection_result, padding=30):
+def crop_image(pil_img, detection_result):
     crop_images = []
     image = PIL_to_cv(pil_img)
     width = image.shape[1]
@@ -111,10 +113,13 @@ def crop_image(pil_img, detection_result, padding=30):
         y2 = int((min_y + h / 2) * height)
         # print(x1, y1, x2, y2)
 
-        x1_pad = max(0, x1 - padding)
-        y1_pad = max(0, y1 - padding)
-        x2_pad = min(width, x2 + padding)
-        y2_pad = min(height, y2 + padding)
+        padding_x = max(int(0.02 * width), 30)
+        padding_y = max(int(0.02 * height), 30)
+
+        x1_pad = max(0, x1 - padding_x)
+        y1_pad = max(0, y1 - padding_y)
+        x2_pad = min(width, x2 + padding_x)
+        y2_pad = min(height, y2 + padding_y)
 
         crop_image = image[y1_pad:y2_pad, x1_pad:x2_pad, :]
         crop_image = cv_to_PIL(crop_image)
@@ -124,7 +129,15 @@ def crop_image(pil_img, detection_result, padding=30):
         crop_images.append(crop_image)
 
         cv2.rectangle(image, (x1, y1), (x2, y2), color=(0, 0, 255), thickness=2)
-        cv2.putText(image, f'{score:.2f}', (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=(255, 0, 0))
+
+        label = f'{detection_class_names[class_id]} {score:.2f}'
+
+        lw = max(round(sum(image.shape) / 2 * 0.003), 2)
+        fontScale = lw / 3
+        thickness = max(lw - 1, 1)
+        w_label, h_label = cv2.getTextSize(label, 0, fontScale=fontScale, thickness=thickness)[0]
+        cv2.rectangle(image, (x1, y1), (x1 + w_label, y1 - h_label - 3), (0, 0, 255), -1, cv2.LINE_AA)
+        cv2.putText(image, label, (x1, y1 - 2), cv2.FONT_HERSHEY_SIMPLEX, fontScale, (255, 255, 255), thickness=thickness, lineType=cv2.LINE_AA)
 
     return crop_images, cv_to_PIL(image)
 
@@ -433,7 +446,7 @@ def extract_text_from_cells(cells, sep=' '):
         for span in spans:
             if 'text' in span:
                 text += span['text'] + sep
-        cell['cell_text'] = text
+        cell['cell_text'] = text.strip()
     return cells
 
 
