@@ -199,8 +199,8 @@ def nms_by_containment(container_objects, package_objects, overlap_threshold=0.5
             if not suppression[object1_num]:
                 object1_packages = set(packages_by_container[object1_num])
                 if len(object2_packages.intersection(object1_packages)) > 0 \
-                    and (iob(container_objects[object2_num]['bbox'], container_objects[object1_num]['bbox']) > 0.5 \
-                         or iob(container_objects[object1_num]['bbox'], container_objects[object2_num]['bbox']) > 0.5):
+                    and (iob(container_objects[object2_num]['bbox'], container_objects[object1_num]['bbox']) >= 0.5 \
+                         or iob(container_objects[object1_num]['bbox'], container_objects[object2_num]['bbox']) >= 0.5):
                     suppression[object2_num] = True
 
     final_objects = [obj for idx, obj in enumerate(container_objects) if not suppression[idx]]

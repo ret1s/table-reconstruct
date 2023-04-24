@@ -206,7 +206,7 @@ def convert_stucture(page_tokens, pil_img, structure_result):
     # print('table_class_objects:', table_class_objects)
     # print('table_bbox:', table_bbox)
 
-    tokens_in_table = [token for token in page_tokens if postprocess.iob(token['bbox'], table_bbox) >= 0.5]
+    tokens_in_table = [token for token in page_tokens if postprocess.iob(token['bbox'], table_bbox) >= 0.01]
     # print('tokens_in_table:', tokens_in_table)
 
     table_structures, cells, confidence_score = postprocess.objects_to_cells(table, table_objects, tokens_in_table, structure_class_names, structure_class_thresholds)
