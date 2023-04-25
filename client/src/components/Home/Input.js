@@ -11,6 +11,7 @@ import {
   Image,
   Heading,
   Stack,
+  useMultiStyleConfig
 } from '@chakra-ui/react';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
@@ -23,6 +24,7 @@ import {
   CellsDirective,
   CellDirective,
 } from '@syncfusion/ej2-react-spreadsheet';
+
 
 function InputSection() {
   const [inputImage, setInputImage] = useState();
@@ -166,7 +168,20 @@ function InputSection() {
                   </FormLabel>
                 </Center>
                 <Center>
-                  <Input maxW="250px" type="file" accept="image/*" />
+                  <Input maxW="250px" type="file" accept="image/*" 
+                   sx={{
+                    "::file-selector-button": {
+                      height: 10,
+                      padding: 0,
+                      mr: 4,
+                      ml: -4,
+                      px: 2,
+                      // background: "none",
+                      border: "none",
+                      fontWeight: "bold",
+                    },
+                  }}
+                  />
                 </Center>
               </FormControl>
               <Center>
@@ -175,6 +190,9 @@ function InputSection() {
                   colorScheme="teal"
                   variant="solid"
                   mt="10px"
+                  fontWeight={'normal'}
+                  bg='#26a69a'
+                  _hover={{ bg: 'green.500' }}
                 >
                   Submit
                 </Button>
