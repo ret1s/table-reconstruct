@@ -9,6 +9,17 @@
   font-weight: bold;
 }
 
+@font-face {
+  font-family: 'Lora-Regular';
+  src: url(./font/Lora-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Lora-Bold';
+  src: url(./font/Lora-Bold.ttf);
+  font-weight: bold;
+}
+
 * {
   font-family: 'Abel Pro';
 }

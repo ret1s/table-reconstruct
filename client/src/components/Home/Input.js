@@ -14,6 +14,7 @@ import {
   useMultiStyleConfig
 } from '@chakra-ui/react';
 import Zoom from 'react-medium-image-zoom';
+import Preloader from '../Pre';
 import 'react-medium-image-zoom/dist/styles.css';
 import {
   SpreadsheetComponent,
@@ -29,6 +30,7 @@ import {
 function InputSection() {
   const [inputImage, setInputImage] = useState();
   const [result, setResult] = useState();
+  const [state, setState] = useState('idle');
 
   function handleImageChange(e) {
     console.log(e.target.files[0]);
@@ -37,6 +39,13 @@ function InputSection() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if (!inputImage) {
+      setState('idle');
+      return;
+    }
+
+    setState('working');
 
     console.log(inputImage);
     console.log(URL.createObjectURL(inputImage));
@@ -48,9 +57,15 @@ function InputSection() {
       console.log(value);
     }
 
-    const response = await axios.post('/api/upload', formData);
-    console.log(response.data);
-    setResult(response.data.result);
+    try {
+      const response = await axios.post('/api/upload', formData);
+      console.log(response.data);
+      setResult(response.data.result);
+    } catch(error) {
+      console.log(Object.keys(error), error.message);
+    }
+
+    setState('idle');
   }
 
   const renderResult =
@@ -227,13 +242,13 @@ function InputSection() {
               Detected Tables
             </Center>
 
-            {result && result.vis_det && (
+            {state == 'idle' ? result && result.vis_det && (
               <Zoom>
                 <Center>
                   <Image boxSize="90%" src={result.vis_det} />
                 </Center>
               </Zoom>
-            )}
+            ) : <Preloader load={true} />}
           </GridItem>
         </Grid>
 

@@ -13,6 +13,7 @@ import {
   IconProps,
   useColorModeValue,
 } from '@chakra-ui/react';
+import Thumbnail from '../../assets/thumbnail.png';
 
 export default function CallToActionWithVideo() {
   return (
@@ -24,6 +25,7 @@ export default function CallToActionWithVideo() {
         direction={{ base: 'column', md: 'row' }}>
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
           <Heading
+            align={'left'}
             lineHeight={1.1}
             fontWeight={600}
             fontSize={{ base: '3xl', sm: '4xl', lg: '6xl' }}>
@@ -47,9 +49,9 @@ export default function CallToActionWithVideo() {
             data with table extraction!
             </Text>
           </Heading>
-          <Text color={'gray.500'}>
+          <Text color={'gray.500'} align={'justify'}>
           This application quickly extracts tables from document images using advanced algorithms and artificial intelligence. It supports various image file formats and allows users to easily select the specific area or page containing the table they need to extract. The extracted data is presented in a structured format, such as CSV or Excel, for further analysis or editing.
-          </Text>
+          </Text> 
           <Stack
             spacing={{ base: 4, sm: 6 }}
             direction={{ base: 'column', sm: 'row' }}>
@@ -95,7 +97,7 @@ export default function CallToActionWithVideo() {
             boxShadow={'2xl'}
             width={'full'}
             overflow={'hidden'}>
-            <IconButton
+            {/* <IconButton
               aria-label={'Play Button'}
               variant={'ghost'}
               _hover={{ bg: 'transparent' }}
@@ -106,7 +108,7 @@ export default function CallToActionWithVideo() {
               left={'50%'}
               top={'50%'}
               transform={'translateX(-50%) translateY(-50%)'}
-            />
+            /> */}
             <Image
               alt={'Hero Image'}
               fit={'cover'}
@@ -114,7 +116,7 @@ export default function CallToActionWithVideo() {
               w={'100%'}
               h={'100%'}
               src={
-                'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
+                Thumbnail
               }
             />
           </Box>

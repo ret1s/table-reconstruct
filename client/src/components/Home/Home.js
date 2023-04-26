@@ -2,6 +2,7 @@ import React from 'react';
 import { Container } from '@chakra-ui/react';
 import Input from './Input';
 import HeadPage from './HeadPage';
+import HowItWorks from './HowItWorks';
 
 function Home() {
   return (
@@ -13,6 +14,9 @@ function Home() {
         <Container maxW="100%" className="home-content">
           <Input />
         </Container>
+      </Container>
+      <Container maxW="75%" className="how-it-works">
+        <HowItWorks />
       </Container>
     </section>
   );

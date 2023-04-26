@@ -78,7 +78,7 @@ def table_detection(pil_img, imgsz=640):
     image = PIL_to_cv(pil_img)
     pred = detection_model(image, size=imgsz)
     pred = pred.xywhn[0]
-    result = pred.detach().numpy()
+    result = pred.detach().cpu().numpy()
     return result
 
 
@@ -86,7 +86,7 @@ def table_structure(pil_img, imgsz=640):
     image = PIL_to_cv(pil_img)
     pred = structure_model(image, size=imgsz)
     pred = pred.xywhn[0]
-    result = pred.detach().numpy()
+    result = pred.detach().cpu().numpy()
     return result
 
 

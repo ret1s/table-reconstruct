@@ -78,7 +78,7 @@ export default function WithSubnavigation() {
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
             color={useColorModeValue('gray.800', 'white')}>
-            <Logo />
+            <Link href='/'><Logo /></Link>
           </Text>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -256,16 +256,16 @@ interface NavItem {
 }
 
 const NAV_ITEMS: Array<NavItem> = [
-  {
-    label: 'Home',
-    href: '/',
-  },
-  {
-    label: 'Product',
-    href: '/product',
-  },
-  {
-    label: 'About',
-    href: '/about',
-  }
+  // {
+  //   label: 'Home',
+  //   href: '/',
+  // },
+  // {
+  //   label: 'Product',
+  //   href: '/product',
+  // },
+  // {
+  //   label: 'About',
+  //   href: '/about',
+  // }
 ];
