@@ -40,9 +40,17 @@ function App() {
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Home />} />
+<<<<<<< HEAD
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
           <Footer className="footer" />
+=======
+            <Route path="/product" element={<Product />} />
+            <Route path="/about" element={<About />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+          <Footer className="footer"/>
+>>>>>>> main
         </div>
       </Router>
     </ChakraProvider>

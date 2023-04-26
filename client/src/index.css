@@ -1,4 +1,5 @@
 @font-face {
+<<<<<<< HEAD
   font-family: 'Abel Pro';
   src: url(./font/AbelPro.ttf);
 }
@@ -17,9 +18,23 @@
 @font-face {
   font-family: 'Lora-Bold';
   src: url(./font/Lora-Bold.ttf);
+=======
+  font-family: 'Abel Regular';
+  src: url(./font/Abel-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Abel Regular';
+  src: url(./font/Abel-Regular.ttf);
+>>>>>>> main
   font-weight: bold;
 }
 
 * {
+<<<<<<< HEAD
   font-family: 'Abel Pro';
 }
+=======
+  font-family: 'Abel Regular';
+}
+>>>>>>> main

@@ -166,6 +166,7 @@ function InputSection() {
 
   return (
     <section>
+<<<<<<< HEAD
       <Stack spacing={6}>
         <Grid minH="100%" templateColumns="repeat(9, 1fr)" gap={4}>
           <GridItem
@@ -222,6 +223,20 @@ function InputSection() {
           >
             <Center fontSize="25" fontWeight={1000} mt="10px">
               Input Image
+=======
+      <Grid
+        mt='-100px'
+        mb='-200px'
+        h='500px'
+        templateColumns='repeat(9, 1fr)'
+        gap={4}
+      >
+        <GridItem borderRadius='lg' borderWidth='1px' h='145px' w='270px' bg='white'>
+        <form onSubmit={handleSubmit} onChange={handleImageChange}>
+          <FormControl >
+            <Center>
+              <FormLabel fontWeight={1000} mt='10px'>Upload Image</FormLabel>
+>>>>>>> main
             </Center>
 
             {inputImage && (
