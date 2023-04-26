@@ -16,7 +16,7 @@ def apply_threshold(objects, threshold):
 def apply_class_thresholds(bboxes, labels, scores, class_names, class_thresholds):
     """
     Filter out bounding boxes whose confidence is below the confidence threshold for
-    its associated class label. 
+    its associated class label.
     """
     # Apply class-specific thresholds
     indices_above_threshold = [idx for idx, (score, label) in enumerate(zip(scores, labels))
@@ -37,11 +37,11 @@ def iou(bbox1, bbox2):
     """
     intersection = Rect(bbox1).intersect(bbox2)
     union = Rect(bbox1).include_rect(bbox2)
-    
-    union_area = union.get_area()  # getArea()
+
+    union_area = union.get_area()
     if union_area > 0:
-        return intersection.get_area() / union.get_area()  # .getArea()
-    
+        return intersection.get_area() / union.get_area()
+
     return 0
 
 
@@ -50,11 +50,11 @@ def iob(bbox1, bbox2):
     Compute the intersection area over box area, for bbox1.
     """
     intersection = Rect(bbox1).intersect(bbox2)
-    
-    bbox1_area = Rect(bbox1).get_area()  # .getArea()
+
+    bbox1_area = Rect(bbox1).get_area()
     if bbox1_area > 0:
-        return intersection.get_area() / bbox1_area  # getArea()
-    
+        return intersection.get_area() / bbox1_area
+
     return 0
 
 
@@ -123,7 +123,7 @@ def objects_to_table_structures(table_object, objects_in_table, tokens_in_table,
     row_rect = Rect()
     for obj in rows:
         row_rect.include_rect(obj['bbox'])
-    column_rect = Rect() 
+    column_rect = Rect()
     for obj in columns:
         column_rect.include_rect(obj['bbox'])
     table_object['row_column_bbox'] = [column_rect[0], row_rect[1], column_rect[2], row_rect[3]]
@@ -144,36 +144,36 @@ def objects_to_table_structures(table_object, objects_in_table, tokens_in_table,
     return table_structures
 
 
-def refine_rows(rows, page_spans, score_threshold):
+def refine_rows(rows, tokens, score_threshold):
     """
     Apply operations to the detected rows, such as
     thresholding, NMS, and alignment.
     """
-    
-    #MODIFY
-    rows = [obj for obj in rows if obj['score'] >= score_threshold or obj['header']]
-    ###
-    
-    rows = nms_by_containment(rows, page_spans, overlap_threshold=0.5)
-    # remove_objects_without_content(page_spans, rows)  # TODO
+
+    if len(tokens) > 0:
+        rows = nms_by_containment(rows, tokens, overlap_threshold=0.5)
+        # remove_objects_without_content(tokens, rows)  # TODO
+    else:
+        rows = nms(rows, match_criteria="object2_overlap",
+                   match_threshold=0.5, keep_higher=True)
     if len(rows) > 1:
         rows = sort_objects_top_to_bottom(rows)
 
     return rows
 
 
-def refine_columns(columns, page_spans, score_threshold):
+def refine_columns(columns, tokens, score_threshold):
     """
     Apply operations to the detected columns, such as
     thresholding, NMS, and alignment.
     """
 
-    #MODIFY
-    columns = [obj for obj in columns if obj['score'] >= score_threshold]
-    ###
-    
-    columns = nms_by_containment(columns, page_spans, overlap_threshold=0.5)
-    # remove_objects_without_content(page_spans, columns)  # TODO
+    if len(tokens) > 0:
+        columns = nms_by_containment(columns, tokens, overlap_threshold=0.5)
+        # remove_objects_without_content(tokens, columns)  # TODO
+    else:
+        columns = nms(columns, match_criteria="object2_overlap",
+                   match_threshold=0.25, keep_higher=True)
     if len(columns) > 1:
         columns = sort_objects_left_to_right(columns)
 
@@ -189,7 +189,7 @@ def nms_by_containment(container_objects, package_objects, overlap_threshold=0.5
     suppression = [False for obj in container_objects]
 
     packages_by_container, _, _ = slot_into_containers(container_objects, package_objects, overlap_threshold=overlap_threshold,
-                                                 unique_assignment=True, forced_assignment=False)
+                                                 unique_assignment=False, forced_assignment=False)
 
     for object2_num in range(1, num_objects):
         object2_packages = set(packages_by_container[object2_num])
@@ -198,7 +198,9 @@ def nms_by_containment(container_objects, package_objects, overlap_threshold=0.5
         for object1_num in range(object2_num):
             if not suppression[object1_num]:
                 object1_packages = set(packages_by_container[object1_num])
-                if len(object2_packages.intersection(object1_packages)) > 0:
+                if len(object2_packages.intersection(object1_packages)) > 0 \
+                    and (iob(container_objects[object2_num]['bbox'], container_objects[object1_num]['bbox']) >= 0.5 \
+                         or iob(container_objects[object1_num]['bbox'], container_objects[object2_num]['bbox']) >= 0.5):
                     suppression[object2_num] = True
 
     final_objects = [obj for idx, obj in enumerate(container_objects) if not suppression[idx]]
@@ -222,10 +224,10 @@ def slot_into_containers(container_objects, package_objects, overlap_threshold=0
     for package_num, package in enumerate(package_objects):
         match_scores = []
         package_rect = Rect(package['bbox'])
-        package_area = package_rect.get_area()  # getArea()        
+        package_area = package_rect.get_area()
         for container_num, container in enumerate(container_objects):
             container_rect = Rect(container['bbox'])
-            intersect_area = container_rect.intersect(package['bbox']).get_area()  # getArea()
+            intersect_area = container_rect.intersect(package['bbox']).get_area()
             overlap_fraction = intersect_area / package_area
             match_scores.append({'container': container, 'container_num': container_num, 'score': overlap_fraction})
 
@@ -244,7 +246,7 @@ def slot_into_containers(container_objects, package_objects, overlap_threshold=0
                     package_assignments[package_num].append(match_score['container_num'])
                 else:
                     break
-            
+
     return container_assignments, package_assignments, best_match_scores
 
 
@@ -268,8 +270,8 @@ def remove_objects_without_content(page_spans, objects):
         object_text, _ = extract_text_inside_bbox(page_spans, obj['bbox'])
         if len(object_text.strip()) == 0:
             objects.remove(obj)
-            
-            
+
+
 def extract_text_inside_bbox(spans, bbox):
     """
     Extract the text inside a bounding box.
@@ -298,10 +300,10 @@ def overlaps(bbox1, bbox2, threshold=0.5):
     Test if more than "threshold" fraction of bbox1 overlaps with bbox2.
     """
     rect1 = Rect(list(bbox1))
-    area1 = rect1.get_area()  # .getArea()
+    area1 = rect1.get_area()
     if area1 == 0:
         return False
-    return rect1.intersect(list(bbox2)).get_area()/area1 >= threshold  # getArea()
+    return rect1.intersect(list(bbox2)).get_area()/area1 >= threshold
 
 
 def extract_text_from_spans(spans, join_with_space=True, remove_integer_superscripts=True):
@@ -314,9 +316,11 @@ def extract_text_from_spans(spans, join_with_space=True, remove_integer_superscr
     else:
         join_char = ""
     spans_copy = spans[:]
-    
+
     if remove_integer_superscripts:
         for span in spans:
+            if not 'flags' in span:
+                continue
             flags = span['flags']
             if flags & 2**0: # superscript flag
                 if is_int(span['text']):
@@ -326,11 +330,11 @@ def extract_text_from_spans(spans, join_with_space=True, remove_integer_superscr
 
     if len(spans_copy) == 0:
         return ""
-    
+
     spans_copy.sort(key=lambda span: span['span_num'])
     spans_copy.sort(key=lambda span: span['line_num'])
     spans_copy.sort(key=lambda span: span['block_num'])
-    
+
     # Force the span at the end of every line within a block to have exactly one space
     # unless the line ends with a space or ends with a non-space followed by a hyphen
     line_texts = []
@@ -349,7 +353,7 @@ def extract_text_from_spans(spans, join_with_space=True, remove_integer_superscr
             line_span_texts.append(span2['text'])
     line_text = join_char.join(line_span_texts)
     line_texts.append(line_text)
-            
+
     return join_char.join(line_texts).strip()
 
 
@@ -438,38 +442,34 @@ def refine_table_structures(table_bbox, table_structures, page_spans, class_thre
     return table_structures
 
 
-def nms(objects, match_criteria="object2_overlap", match_threshold=0.05, keep_metric="score", keep_higher=True):
+def nms(objects, match_criteria="object2_overlap", match_threshold=0.05, keep_higher=True):
     """
     A customizable version of non-maxima suppression (NMS).
-    
+
     Default behavior: If a lower-confidence object overlaps more than 5% of its area
     with a higher-confidence object, remove the lower-confidence object.
 
     objects: set of dicts; each object dict must have a 'bbox' and a 'score' field
     match_criteria: how to measure how much two objects "overlap"
     match_threshold: the cutoff for determining that overlap requires suppression of one object
-    keep_metric: which metric to use to determine the object to keep
     keep_higher: if True, keep the object with the higher metric; otherwise, keep the lower
     """
     if len(objects) == 0:
         return []
 
-    if keep_metric=="score":
-        objects = sort_objects_by_score(objects, reverse=keep_higher)
-    elif keep_metric=="area":
-        objects = sort_objects_by_area(objects, reverse=keep_higher)
+    objects = sort_objects_by_score(objects, reverse=keep_higher)
 
     num_objects = len(objects)
     suppression = [False for obj in objects]
 
     for object2_num in range(1, num_objects):
         object2_rect = Rect(objects[object2_num]['bbox'])
-        object2_area = object2_rect.get_area()  # .getArea()
+        object2_area = object2_rect.get_area()
         for object1_num in range(object2_num):
             if not suppression[object1_num]:
                 object1_rect = Rect(objects[object1_num]['bbox'])
-                object1_area = object1_rect.get_area()  # .getArea()
-                intersect_area = object1_rect.intersect(object2_rect).get_area()  # .getArea()
+                object1_area = object1_rect.get_area()
+                intersect_area = object1_rect.intersect(object2_rect).get_area()
                 try:
                     if match_criteria=="object1_overlap":
                         metric = intersect_area / object1_area
@@ -495,7 +495,7 @@ def align_headers(headers, rows):
     For now, we are not supporting tables with multiple headers, so we need to
     eliminate anything besides the top-most header.
     """
-    
+
     aligned_headers = []
 
     for row in rows:
@@ -674,7 +674,7 @@ def header_supercell_tree(supercells):
     """
     header_supercells = [supercell for supercell in supercells if 'header' in supercell and supercell['header']]
     header_supercells = sort_objects_by_score(header_supercells)
-    
+
     for header_supercell in header_supercells[:]:
         ancestors_by_row = defaultdict(int)
         min_row = min(header_supercell['row_numbers'])
@@ -689,8 +689,8 @@ def header_supercell_tree(supercells):
             if not ancestors_by_row[row] == 1:
                 supercells.remove(header_supercell)
                 break
-                
-                
+
+
 def table_structure_to_cells(table_structures, table_spans, table_bbox):
     """
     Assuming the row, column, supercell, and header bounding boxes have
@@ -719,8 +719,8 @@ def table_structure_to_cells(table_structures, table_spans, table_bbox):
             cell['subcell'] = False
             for supercell in supercells:
                 supercell_rect = Rect(list(supercell['bbox']))
-                if (supercell_rect.intersect(cell_rect).get_area()  # .getArea()
-                        / cell_rect.get_area()) > 0.5:  # getArea()
+                if (supercell_rect.intersect(cell_rect).get_area()
+                        / cell_rect.get_area()) > 0.5:
                     cell['subcell'] = True
                     break
 
@@ -740,8 +740,8 @@ def table_structure_to_cells(table_structures, table_spans, table_bbox):
         header = True
         for subcell in subcells:
             subcell_rect = Rect(list(subcell['bbox']))
-            subcell_rect_area = subcell_rect.get_area()  # .getArea()
-            if (subcell_rect.intersect(supercell_rect).get_area()  # .getArea()
+            subcell_rect_area = subcell_rect.get_area()
+            if (subcell_rect.intersect(supercell_rect).get_area()
                     / subcell_rect_area) > 0.5:
                 if cell_rect is None:
                     cell_rect = Rect(list(subcell['bbox']))
@@ -789,10 +789,10 @@ def table_structure_to_cells(table_structures, table_spans, table_bbox):
     for cell, cell_span_nums in zip(cells, span_nums_by_cell):
         cell_spans = [table_spans[num] for num in cell_span_nums]
         # TODO: Refine how text is extracted; should be character-based, not span-based;
-        # but need to associate 
+        # but need to associate
         # cell['cell_text'] = extract_text_from_spans(cell_spans, remove_integer_superscripts=False)  # TODO
         cell['spans'] = cell_spans
-        
+
     # Adjust the row, column, and cell bounding boxes to reflect the extracted text
     num_rows = len(rows)
     rows = sort_objects_top_to_bottom(rows)
@@ -838,7 +838,7 @@ def table_structure_to_cells(table_structures, table_spans, table_bbox):
         for column_num in cell['column_nums']:
             column_rect.include_rect(list(columns[column_num]['bbox']))
         cell_rect = row_rect.intersect(column_rect)
-        if cell_rect.get_area() > 0:  # getArea()
+        if cell_rect.get_area() > 0:
             cell['bbox'] = list(cell_rect)
             pass
 
