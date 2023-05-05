@@ -18,6 +18,7 @@ from matplotlib.patches import Patch
 from paddleocr import PaddleOCR
 # import pytesseract
 # from pytesseract import Output
+from fitz import Rect
 
 import postprocess
 
@@ -205,6 +206,13 @@ def convert_stucture(page_tokens, pil_img, structure_result):
         table_bbox = (0, 0, 1000, 1000)
     # print('table_class_objects:', table_class_objects)
     # print('table_bbox:', table_bbox)
+
+    tmp = Rect(table_bbox)
+    for obj in table_objects:
+        if structure_class_names[obj['label']] in ('table column', 'table row'):
+            if postprocess.iob(obj['bbox'], table_bbox) >= 0.001:
+                tmp.include_rect(obj['bbox'])
+    table_bbox = (tmp[0], tmp[1], tmp[2], tmp[3])
 
     tokens_in_table = [token for token in page_tokens if postprocess.iob(token['bbox'], table_bbox) >= 0.01]
     # print('tokens_in_table:', tokens_in_table)
