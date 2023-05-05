@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, current_app
 from io import BytesIO
 from PIL import Image
-from app import main
+import core
 
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ def upload():
         print(f'# Received file content: {file_content[:100]}')
 
         img = Image.open(BytesIO(file_bytes))
-        result = main(img, filename)
+        result = core.main(img, filename)
         print(f'# main() return result: {result}')
 
         data['result'] = result

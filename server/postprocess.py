@@ -151,7 +151,7 @@ def refine_rows(rows, tokens, score_threshold):
     """
 
     if len(tokens) > 0:
-        rows = nms_by_containment(rows, tokens, overlap_threshold=0.5)
+        rows = nms_by_containment(rows, tokens, overlap_threshold=0.5, target='row')
         # remove_objects_without_content(tokens, rows)  # TODO
     else:
         rows = nms(rows, match_criteria="object2_overlap",
@@ -169,7 +169,7 @@ def refine_columns(columns, tokens, score_threshold):
     """
 
     if len(tokens) > 0:
-        columns = nms_by_containment(columns, tokens, overlap_threshold=0.5)
+        columns = nms_by_containment(columns, tokens, overlap_threshold=0.5, target='column')
         # remove_objects_without_content(tokens, columns)  # TODO
     else:
         columns = nms(columns, match_criteria="object2_overlap",
@@ -180,7 +180,7 @@ def refine_columns(columns, tokens, score_threshold):
     return columns
 
 
-def nms_by_containment(container_objects, package_objects, overlap_threshold=0.5):
+def nms_by_containment(container_objects, package_objects, overlap_threshold=0.5, target='row'):
     """
     Non-maxima suppression (NMS) of objects based on shared containment of other objects.
     """
@@ -198,10 +198,23 @@ def nms_by_containment(container_objects, package_objects, overlap_threshold=0.5
         for object1_num in range(object2_num):
             if not suppression[object1_num]:
                 object1_packages = set(packages_by_container[object1_num])
-                if len(object2_packages.intersection(object1_packages)) > 0 \
-                    and (iob(container_objects[object2_num]['bbox'], container_objects[object1_num]['bbox']) >= 0.5 \
-                         or iob(container_objects[object1_num]['bbox'], container_objects[object2_num]['bbox']) >= 0.5):
-                    suppression[object2_num] = True
+                if len(object2_packages.intersection(object1_packages)) > 0:
+                    if target == 'row':
+                        row1_height = container_objects[object1_num]['bbox'][3] - container_objects[object1_num]['bbox'][1]
+                        row2_height = container_objects[object2_num]['bbox'][3] - container_objects[object2_num]['bbox'][1]
+                        min_row_overlap = max(container_objects[object1_num]['bbox'][1], container_objects[object2_num]['bbox'][1])
+                        max_row_overlap = min(container_objects[object1_num]['bbox'][3], container_objects[object2_num]['bbox'][3])
+                        overlap_height = max_row_overlap - min_row_overlap
+                        overlap_fraction = max(overlap_height/row1_height, overlap_height/row2_height)
+                    elif target == 'column':
+                        col1_height = container_objects[object1_num]['bbox'][2] - container_objects[object1_num]['bbox'][0]
+                        col2_height = container_objects[object2_num]['bbox'][2] - container_objects[object2_num]['bbox'][0]
+                        min_col_overlap = max(container_objects[object1_num]['bbox'][0], container_objects[object2_num]['bbox'][0])
+                        max_col_overlap = min(container_objects[object1_num]['bbox'][2], container_objects[object2_num]['bbox'][2])
+                        overlap_width = max_col_overlap - min_col_overlap
+                        overlap_fraction = max(overlap_width/col1_height, overlap_width/col2_height)
+                    if overlap_fraction >= 0.5:
+                        suppression[object2_num] = True
 
     final_objects = [obj for idx, obj in enumerate(container_objects) if not suppression[idx]]
     return final_objects
