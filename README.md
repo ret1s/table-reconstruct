@@ -6,6 +6,8 @@ A deep leaning-based web application that helps users extract tables from images
 
 The models used in this application are available at the repository [bachpc/pubtables-yolov5](https://github.com/bachpc/pubtables-yolov5).
 
+A demo of the product is also available on [Hugging Face Spaces](https://huggingface.co/spaces/bachpc/table-structure-recognition).
+
 Read `client/README.md` and `server/README.md` to start the application.
 
 ## Some images
