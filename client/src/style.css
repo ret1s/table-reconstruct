@@ -5,19 +5,11 @@
   width: 100%;
   height: 100%;
   z-index: 1000;
-<<<<<<< HEAD
   background-color: white;
   background-image: url(./assets/pre.svg);
   background-repeat: no-repeat;
   background-position: center;
   opacity: 0.35;
-=======
-  background-color: black;
-  background-image: url(./assets/pre.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.8;
->>>>>>> main
 }
 
 .home-section {
@@ -30,21 +22,8 @@
 }
 
 .home-content {
-<<<<<<< HEAD
   padding: 0px 0px 0px 0px;
   margin: 0px 0px 0px 0px;
   color: black;
   text-align: left;
 }
-=======
-  padding: 80px 16px 300px 16px;
-  margin: 10px 0px 0px 0px;
-  color: black;
-  text-align: left;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-}
->>>>>>> main

@@ -17,7 +17,7 @@ import './index.css';
 import { registerLicense } from '@syncfusion/ej2-base';
 
 registerLicense(
-  'ORg4AjUWIQA/Gnt2VFhhQlJBfVpdXGdWfFN0RnNadV90flRCcC0sT3RfQF5jTX9XdkZiUH1dcndQQw=='
+'ORg4AjUWIQA/Gnt2VFhiQlJPcUBFQmFJfFBmRGJTfl16cVNWACFaRnZdQV1lSXlRdUdhWnlacHdQ'
 );
 
 function App() {
@@ -40,17 +40,9 @@ function App() {
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Home />} />
-<<<<<<< HEAD
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
           <Footer className="footer" />
-=======
-            <Route path="/product" element={<Product />} />
-            <Route path="/about" element={<About />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-          <Footer className="footer"/>
->>>>>>> main
         </div>
       </Router>
     </ChakraProvider>
